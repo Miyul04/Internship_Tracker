@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Tracker - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="image/logo.png">
+   <link href="css/style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+  
+  <!-- Include Header -->
+  <div id="header"></div>
+
+  <!-- Main Content -->
+  <div class="container my-4">
+    <div class="row">
+      <!-- Total Students Card -->
+      <div class="col-md-4">
+      <div class="card mb-3">
+      <div class="card-body">
+          <h6>Total Students</h6>
+          <h3 id="total-students">120</h3> <!-- Dynamic count of students -->
+      </div>
+      </div>
+      </div>
+
+      <!-- Total Completed Internships -->
+      <div class="col-md-4">
+      <div class="card mb-3">
+      <div class="card-body">
+          <h6>Total Completed Internships</h6>
+          <h3 id="completed-internships">25</h3> <!-- Dynamic count -->
+      </div>
+      </div>
+      </div>
+
+      <!-- Internship Status Chart -->
+      <div class="col-md-4">
+      <div class="card mb-3">
+      <div class="card-body">
+          <h6>Internship Status</h6>
+          <canvas id="statusChart" height="120"></canvas> <!-- Pie chart -->
+      </div>
+      </div>
+      </div>
+      </div>
+
+    <div class="row">
+      <!-- Recent Activities -->
+      <div class="col-md-6">
+      <div class="card mb-3">
+      <div class="card-body">
+      <h6>Recent Activities</h6>
+        <ul class="list-group">
+              <li class="list-group-item">Student "John Doe" completed internship.</li>
+              <li class="list-group-item">Task "Prepare Reports" updated to In Progress.</li>
+              <li class="list-group-item">Internship with "XYZ Corp" was assigned.</li>
+        </ul>
+      </div>
+      </div>
+      </div>
+
+     
+      <div class="col-md-6">
+      <div class="card mb-3">
+      <div class="card-body">
+      <h6>Active Users</h6>
+      <ul class="list-group">
+      <li class="list-group-item">Admin - Active</li>
+      <li class="list-group-item">Supervisor - Inactive</li>
+      <li class="list-group-item">Intern - Active</li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+
+  <!-- Include Footer -->
+  <div id="footer"></div>
+
+  <script>
+    // Dynamically load the header and footer
+    document.getElementById("header").innerHTML = `
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+          <a class="navbar-brand" href="dashboard.html">Internship Tracker</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+        <div class="collapse navbar-collapse" id="navmenu">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+              <li class="nav-item"><a class="nav-link" href="students.html">Students</a></li>
+              <li class="nav-item"><a class="nav-link" href="tasks.html">Tasks</a></li>
+              <li class="nav-item"><a class="nav-link" href="internships.html">Internships</a></li>
+              <li class="nav-item"><a class="nav-link" href="index.html">Logout</a></li>
+            </ul>
+
+        </div>
+        </div>
+      </nav>
+    `;
+
+    document.getElementById("footer").innerHTML = `
+      <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Internship Tracker. All rights reserved.</p>
+      </footer>
+    `;
+
+    // Fetch the student data from localStorage
+    const students = JSON.parse(localStorage.getItem('students')) || [];
+
+    // Calculate the counts for each internship status
+    const internshipStatusCounts = {
+      completed: students.filter(student => student.status === "completed").length,
+      inprogress: students.filter(student => student.status === "inprogress").length,
+      pending: students.filter(student => student.status === "pending").length
+    };
+
+    // Update the total student count dynamically
+    document.getElementById("total-students").innerText = students.length;
+    document.getElementById("completed-internships").innerText = internshipStatusCounts.completed;
+
+    // Chart.js Initialization
+    const ctx = document.getElementById('statusChart').getContext('2d');
+    const statusChart = new Chart(ctx, {
+      type: 'pie', // Pie chart
+      data: {
+        labels: ['Completed', 'In Progress', 'Pending'],
+        datasets: [{
+          label: 'Internship Status',
+          data: [internshipStatusCounts.completed, internshipStatusCounts.inprogress, internshipStatusCounts.pending],
+          backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+          borderColor: ['#ffffff', '#ffffff', '#ffffff'],
+          borderWidth: 2
+        }]
+      }
+    });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
